@@ -25,7 +25,7 @@
                     <div class="card-body" style="user-select: none;">
                         <div class="mb-2">
                             <label for="">Логін</label>
-                            <input value="{{ old('name') }}" name="name" autofocus selected class="form-control text-center" type="text">
+                            <input value="{{ old('email') }}" name="email" autofocus selected class="form-control text-center" type="text">
                         </div>
                         <div class="mb-2">
                             <label for="">Пароль</label>

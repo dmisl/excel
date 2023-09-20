@@ -15,15 +15,25 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class MeterExport implements FromView, WithTitle, WithStyles, ShouldAutoSize
 {
     private $date;
+    private $date_from;
+    private $date_to;
 
-    public function __construct($date)
+    public function __construct($date = 0, $date_from = 0, $date_to = 0)
     {
         $this->date = $date;
+        $this->date_from = $date_from;
+        $this->date_to = $date_to;
     }
 
     public function view(): View
     {
-        return view('tables.meter', ['meters' => Meter::query()->where('date', '=', $this->date)->get()]);
+        if($this->date)
+        {
+            return view('tables.meter', ['meters' => Meter::query()->where('date', '=', $this->date)->get()]);
+        } else if($this->date_from && $this->date_to)
+        {
+            return view('table_between.meter', ['meters' => Meter::query()->whereBetween('date', [$this->date_from, $this->date_to])->get()]);
+        }
     }
 
     public function title(): string

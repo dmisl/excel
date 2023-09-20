@@ -17,15 +17,25 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class StationeriesExport implements FromView, ShouldAutoSize, WithStyles
 {
     private $date;
+    private $date_from;
+    private $date_to;
 
-    public function __construct($date)
+    public function __construct($date = 0, $date_from = 0, $date_to = 0)
     {
         $this->date = $date;
+        $this->date_from = $date_from;
+        $this->date_to = $date_to;
     }
 
     public function view(): View
     {
-        return view('tables.stationery', ['stationeries' => Stationery::query()->where('date', '=', $this->date)->get()]);
+        if($this->date)
+        {
+            return view('tables.stationery', ['stationeries' => Stationery::query()->where('date', '=', $this->date)->get()]);
+        } else if($this->date_from && $this->date_to)
+        {
+            return view('table_between.stationery', ['stationeries' => Stationery::query()->whereBetween('date', [$this->date_from, $this->date_to])->get()]);
+        }
     }
 
     public function styles(Worksheet $sheet)

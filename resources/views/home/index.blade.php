@@ -7,22 +7,30 @@
     <h1 class="text-center my-5">Список таблиць</h1>
     <div class="row">
         <div class="col-6 col-md-4 mt-3">
-            <div class="card bg-primary bg-gradient text-light border" role="button" style="user-select: none;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class="card bg-primary bg-gradient text-light border" role="button" style="user-select: none;" data-bs-toggle="modal" data-bs-target="#exampleModal1">
                 <div class="card-body">
-                    <h2 class="text-center ">Канцтовари</h2>
+                    <h2 class="text-center">Канцтовари</h2>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="col-6 col-md-4 mt-3">
+            <div class="card bg-primary bg-gradient text-light border" role="button" style="user-select: none;" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                <div class="card-body">
+                    <h2 class="text-center">Замовлення одноразки B1</h2>
+                </div>
+            </div>
+        </div>
+        @for($i = 1; $i < 7; $i++)
+        <div class="modal fade" id="exampleModal{{ $i }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Замовлення</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Вибір</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body mb1">
                         <label for="" class="my-1">Виберіть опцію</label>
-                        <select class="form-select mt-1 select1" aria-label="Default select example">
+                        <select class="form-select mt-1 select{{ $i }}" aria-label="Default select example">
                             <option selected></option>
                             <option value="1">Перегляд сторінки</option>
                             <option value="2">Завантажити дані</option>
@@ -30,71 +38,74 @@
                             <option value="4">Створити нову дату</option>
                             <option value="5">Завантажити дані між датами</option>
                         </select>
-                        <form class="form1" method="" action="" >
+                        <form class="form{{ $i }}" method="" action="" >
                             {{-- VIEW --}}
-                            <div class="view1" hidden>
+                            <div class="view{{ $i }}" hidden>
                                 <label for="" class="mt-1">Виберіть дату</label>
-                                <select class="form-select mt-1 viewdate1" aria-label="Default select example">
+                                <select class="form-select mt-1 viewdate{{ $i }}" aria-label="Default select example">
                                     <option selected></option>
                                 </select>
                             </div>
                             {{-- EXPORT --}}
-                            <div class="export1" hidden>
+                            <div class="export{{ $i }}" hidden>
                                 <label for="" class="mt-1">Виберіть дату</label>
-                                <select class="form-select mt-1 exportdate1" name="export" aria-label="Default select example">
+                                <select class="form-select mt-1 exportdate{{ $i }}" name="export" aria-label="Default select example">
                                     <option selected></option>
                                 </select>
                             </div>
                             <div class="text-center mt-3">
-                                <button hidden type="submit" class="btn btn-primary exportlink1">Завантажити дані</button>
+                                <button hidden type="submit" class="btn btn-primary exportlink{{ $i }}">Завантажити дані</button>
                             </div>
                             {{-- IMPORT --}}
-                            <div class="import1" hidden>
+                            <div class="import{{ $i }}" hidden>
                                 <label for="" class="mt-1">Виберіть дату</label>
-                                <select class="form-select mt-1 importdate1" name="import" aria-label="Default select example">
+                                <select class="form-select mt-1 importdate{{ $i }}" name="import" aria-label="Default select example">
                                     <option selected></option>
                                 </select>
                             </div>
-                            <div class="text-center mt-3 importfile1" hidden>
+                            <div class="text-center mt-3 importfile{{ $i }}" hidden>
                                 <label for="formFile" class="form-label">Виберіть файл для імпортування</label>
-                                <input class="form-control file1" type="file" name="excel" id="formFile">
+                                <input class="form-control file{{ $i }}" type="file" name="excel" id="formFile">
                             </div>
                             <div class="text-center mt-3">
-                                <button hidden type="submit" class="btn btn-primary importlink1">Імпортувати дані</button>
+                                <button hidden type="submit" class="btn btn-primary importlink{{ $i }}">Імпортувати дані</button>
                             </div>
                             {{-- CREATE --}}
-                            <div class="create1" hidden>
+                            <div class="create{{ $i }}" hidden>
                                 <label class="mt1">Впишіть дату (повинна бути такого типу, як вписано нище)</label>
-                                <input class="form-control createdate1" name="create" placeholder="YYYY-MM-DD">
+                                <input class="form-control createdate{{ $i }}" name="create" placeholder="YYYY-MM-DD">
                             </div>
-                            <div class="text-center mt-3 createfile1" hidden>
+                            <div class="text-center mt-3 createfile{{ $i }}" hidden>
                                 <label for="formFile" class="form-label">Виберіть файл для імпортування</label>
-                                <input class="form-control cfile1" type="file" name="cexcel" id="formFile">
+                                <input class="form-control cfile{{ $i }}" type="file" name="cexcel" id="formFile">
                             </div>
                             <div class="text-center mt-3">
-                                <button hidden type="submit" class="btn btn-primary createlink1">Створити дату</button>
+                                <button hidden type="submit" class="btn btn-primary createlink{{ $i }}">Створити дату</button>
                             </div>
                             {{-- EXPORT BETWEEN --}}
-                            <div class="export_between1">
+                            <div class="export_between{{ $i }}" hidden>
                                 <label class="mt-1">Виберіть дату ВІД якої ви хочете завантажити дані</label>
 
-                                <select name="date_from" class="export_between_date_from1 form-select mt-1" aria-label="Default select example">
+                                <select name="date_from" class="export_between_date_from{{ $i }} form-select mt-1" aria-label="Default select example">
                                     <option selected></option>
                                 </select>
 
-                                <div class="export_between_div1 mt-3">
+                                <div class="export_between_div{{ $i }} mt-3" hidden>
 
                                     <label>Виберіть дату ДО якої ви хочете завантажити дані</label>
 
-                                    <select name="date_to" class="export_between_date_to1 form-select mt-1" aria-label="Default select example">
+                                    <select name="date_to" class="export_between_date_to{{ $i }} form-select mt-1" aria-label="Default select example">
                                         <option selected></option>
                                     </select>
 
                                 </div>
+                                <div class="export_between_link{{ $i }} mt-3" hidden>
+                                    <button type="submit" class="btn btn-primary">Завантажити дані</button>
+                                </div>
                             </div>
                         </form>
                         <div class="text-center mt-3">
-                            <a href="#" class="viewlink1" hidden>
+                            <a href="#" class="viewlink{{ $i }}" hidden>
                                 <button class="btn btn-primary">Перейти на сторінку</button>
                             </a>
                         </div>
@@ -102,6 +113,8 @@
                 </div>
             </div>
         </div>
+        @endfor
+
         <div class="col-6 col-md-4 mt-3">
             <div class="card">
                 <div class="card-body"></div>
@@ -122,179 +135,212 @@
 </div>
 
 <script>
-    let mb1 = document.querySelector('.mb1')
-    let select1 = document.querySelector('.select1')
     let dates = [];
-    let form1 = document.querySelector('.form1')
     let date = document.querySelectorAll('.date')
 
-    let view1 = document.querySelector('.view1')
-    let viewdate1 = document.querySelector('.viewdate1')
-    let viewlink1 = document.querySelector('.viewlink1')
-
-    let export1 = document.querySelector('.export1')
-    let exportdate1 = document.querySelector('.exportdate1')
-    let exportlink1 = document.querySelector('.exportlink1')
-
-    let import1 = document.querySelector('.import1')
-    let importdate1 = document.querySelector('.importdate1')
-    let importlink1 = document.querySelector('.importlink1')
-    let importfile1 = document.querySelector('.importfile1')
-
-    let create1 = document.querySelector('.create1')
-    let createdate1 = document.querySelector('.createdate1')
-    let createlink1 = document.querySelector('.createlink1')
-    let createfile1 = document.querySelector('.importfile1')
-
-    let file1 = document.querySelector('.file1')
-    let cfile1 = document.querySelector('.cfile1')
-
-    let export_between1 = document.querySelector('.export_between1')
-    let export_between_date_from1 = document.querySelector('.export_between_date_from1')
-
     date.forEach(e => {
-        if(dates.includes(e.innerText))
-        {
-
-        } else
-        {
-            if(e.innerText.length !== 0)
+            if(dates.includes(e.innerText))
             {
-                dates.push(e.innerText)
+
+            } else
+            {
+                if(e.innerText.length !== 0)
+                {
+                    dates.push(e.innerText)
+                }
             }
-        }
     });
 
-    dates.forEach(e => {
-        viewdate1.innerHTML += `<option value="${e}">${e}</option>`
-        exportdate1.innerHTML += `<option value="${e}">${e}</option>`
-        importdate1.innerHTML += `<option value="${e}">${e}</option>`
-        export_between_date_from1.innerHTML += `<option value="${e}>${e}</option>"`
-    })
+    @for($i = 1; $i < 3; $i++)
 
-    select1.addEventListener('change', function () {
-        if(select1.value == 1)
-        {
-            view1.removeAttribute('hidden')
-        } else
-        {
-            view1.setAttribute('hidden', '')
-            viewlink1.setAttribute('hidden', '')
-        }
-        if(select1.value == 2)
-        {
-            let csrf = document.createElement('input')
-            csrf.type = 'hidden'
-            csrf.name = '_token'
-            csrf.value = '{{ csrf_token() }}'
-            form1.appendChild(csrf)
-            export1.removeAttribute('hidden')
-        } else
-        {
-            export1.setAttribute('hidden', '')
-            exportlink1.setAttribute('hidden', '')
-        }
-        if(select1.value == 3)
-        {
-            let csrf = document.createElement('input')
-            csrf.type = 'hidden'
-            csrf.name = '_token'
-            csrf.value = '{{ csrf_token() }}'
-            form1.appendChild(csrf)
-            import1.removeAttribute('hidden')
-        } else
-        {
-            importfile1.setAttribute('hidden', '')
-            importlink1.setAttribute('hidden', '')
-            import1.setAttribute('hidden', '')
-        }
-        if(select1.value == 4)
-        {
-            let csrf = document.createElement('input')
-            csrf.type = 'hidden'
-            csrf.name = '_token'
-            csrf.value = '{{ csrf_token() }}'
-            form1.appendChild(csrf)
-            create1.removeAttribute('hidden')
-        } else
-        {
-            createlink1.setAttribute('hidden', '')
-            create1.setAttribute('hidden', '')
-        }
-        if(select1.value == 5)
-        {
-            let csrf = document.createElement('input')
-            csrf.type = 'hidden'
-            csrf.name = '_token'
-            csrf.value = '{{ csrf_token() }}'
-            form1.appendChild(csrf)
-            export_between1.removeAttribute('hidden')
-        } else
-        {
-            export_between1.setAttribute('hidden', '')
-        }
-    })
+        let select{{$i}} = document.querySelector('.select{{$i}}')
+        let form{{$i}} = document.querySelector('.form{{$i}}')
 
-    export_between_date_from1.addEventListener('change', function () {
-        console.log(1)
-    })
+        let view{{$i}} = document.querySelector('.view{{$i}}')
+        let viewdate{{$i}} = document.querySelector('.viewdate{{$i}}')
+        let viewlink{{$i}} = document.querySelector('.viewlink{{$i}}')
 
-    viewdate1.addEventListener('change', function () {
-        if(viewdate1.length !== 0)
-        {
-            viewlink1.href = `http://excel/stationery/${viewdate1.value}`
-            viewlink1.removeAttribute('hidden')
-        } else
-        {
-            viewlink.setAttribute('hidden', '')
-        }
+        let export{{$i}} = document.querySelector('.export{{$i}}')
+        let exportdate{{$i}} = document.querySelector('.exportdate{{$i}}')
+        let exportlink{{$i}} = document.querySelector('.exportlink{{$i}}')
 
-    })
+        let import{{$i}} = document.querySelector('.import{{$i}}')
+        let importdate{{$i}} = document.querySelector('.importdate{{$i}}')
+        let importlink{{$i}} = document.querySelector('.importlink{{$i}}')
+        let importfile{{$i}} = document.querySelector('.importfile{{$i}}')
 
-    exportdate1.addEventListener('change', function () {
-        if(exportdate1.length !== 0)
-        {
-            exportlink1.removeAttribute('hidden')
-            form1.attributes.method.value = 'POST'
-            form1.attributes.action.value = '{{ route("stationery.export") }}'
-        } else
-        {
-            exportlink1.setAttribute('hidden', '')
-        }
-    })
+        let create{{$i}} = document.querySelector('.create{{$i}}')
+        let createdate{{$i}} = document.querySelector('.createdate{{$i}}')
+        let createlink{{$i}} = document.querySelector('.createlink{{$i}}')
+        let createfile{{$i}} = document.querySelector('.createfile{{$i}}')
 
-    importdate1.addEventListener('change', function () {
-        if(importdate1.length !== 0)
-        {
-            form1.attributes.method.value = 'POST'
-            form1.attributes.action.value = '{{ route("stationery.import") }}'
-            form1.setAttribute('enctype', 'multipart/form-data')
-            importfile1.removeAttribute('hidden')
-        } else
-        {
-            importfile1.setAttribute('hidden', '')
-        }
-    })
+        let file{{$i}} = document.querySelector('.file{{$i}}')
+        let cfile{{$i}} = document.querySelector('.cfile{{$i}}')
 
-    createdate1.addEventListener('keyup', function () {
-        if(createdate1.value.length == 10){
-            form1.attributes.method.value = 'POST'
-            form1.attributes.action.value = '{{ route("stationery.import") }}'
-            form1.setAttribute('enctype', 'multipart/form-data')
-            createfile1.removeAttribute('hidden')
-        } else
-        {
-            createfile1.setAttribute('hidden', '')
-        }
-    })
+        let export_between{{$i}} = document.querySelector('.export_between{{$i}}')
+        let export_between_div{{$i}} = document.querySelector('.export_between_div{{$i}}')
+        let export_between_date_from{{$i}} = document.querySelector('.export_between_date_from{{$i}}')
+        let export_between_date_to{{$i}} = document.querySelector('.export_between_date_to{{$i}}')
+        let export_between_link{{$i}} = document.querySelector('.export_between_link{{$i}}')
 
-    file1.addEventListener('change', function (){
-        importlink1.removeAttribute('hidden')
-    })
+        dates.forEach(e => {
+            viewdate{{$i}}.innerHTML += `<option value="${e}">${e}</option>`
+            exportdate{{$i}}.innerHTML += `<option value="${e}">${e}</option>`
+            importdate{{$i}}.innerHTML += `<option value="${e}">${e}</option>`
+            export_between_date_from{{$i}}.innerHTML += `<option value="${e}">${e}</option>`
+        })
 
-    cfile1.addEventListener('change', function () {
-        createlink1.removeAttribute('hidden')
-    })
+        select{{$i}}.addEventListener('change', function () {
+            if(select1.value == 1)
+            {
+                view{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                view{{$i}}.setAttribute('hidden', '')
+                viewlink{{$i}}.setAttribute('hidden', '')
+            }
+            if(select{{$i}}.value == 2)
+            {
+                let csrf = document.createElement('input')
+                csrf.type = 'hidden'
+                csrf.name = '_token'
+                csrf.value = '{{ csrf_token() }}'
+                form{{$i}}.appendChild(csrf)
+                export{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                export{{$i}}.setAttribute('hidden', '')
+                exportlink{{$i}}.setAttribute('hidden', '')
+            }
+            if(select{{$i}}.value == 3)
+            {
+                let csrf = document.createElement('input')
+                csrf.type = 'hidden'
+                csrf.name = '_token'
+                csrf.value = '{{ csrf_token() }}'
+                form{{$i}}.appendChild(csrf)
+                import{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                importfile{{$i}}.setAttribute('hidden', '')
+                importlink{{$i}}.setAttribute('hidden', '')
+                import{{$i}}.setAttribute('hidden', '')
+            }
+            if(select{{$i}}.value == 4)
+            {
+                let csrf = document.createElement('input')
+                csrf.type = 'hidden'
+                csrf.name = '_token'
+                csrf.value = '{{ csrf_token() }}'
+                form{{$i}}.appendChild(csrf)
+                create{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                createlink{{$i}}.setAttribute('hidden', '')
+                createfile{{$i}}.setAttribute('hidden', '')
+                create{{$i}}.setAttribute('hidden', '')
+            }
+            if(select{{$i}}.value == 5)
+            {
+                let csrf = document.createElement('input')
+                csrf.type = 'hidden'
+                csrf.name = '_token'
+                csrf.value = '{{ csrf_token() }}'
+                form{{$i}}.appendChild(csrf)
+                export_between{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                export_between{{$i}}.setAttribute('hidden', '')
+            }
+        })
+
+        export_between_date_from{{$i}}.addEventListener('change', function () {
+            if(export_between_date_from{{$i}}.value.length >= 1)
+            {
+                export_between_div{{$i}}.removeAttribute('hidden')
+                export_between_date_to{{$i}}.innerHTML = `<option></option>`
+                let selected_option = export_between_date_from{{$i}}.options[export_between_date_from{{$i}}.selectedIndex].value
+                dates.forEach(e => {
+                    if(new Date(e).getTime() >= new Date(selected_option).getTime())
+                    {
+                        export_between_date_to{{$i}}.innerHTML += `<option value="${e}">${e}</option>`
+                    }
+                });
+            } else
+            {
+                export_between_div{{$i}}.setAttribute('hidden', '')
+            }
+        })
+
+        export_between_date_to{{$i}}.addEventListener('change', function () {
+            if(export_between_date_to{{$i}}.value.length >= 1 && export_between_date_from{{$i}}.value.length >= 1)
+            {
+                form{{$i}}.attributes.method.value = 'POST'
+                form{{$i}}.attributes.action.value = '{{ route("stationery.export") }}'
+                export_between_link{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                export_between_link{{$i}}.setAttribute('hidden', '')
+            }
+        })
+
+        viewdate{{$i}}.addEventListener('change', function () {
+            if(viewdate{{$i}}.length !== 0)
+            {
+                viewlink{{$i}}.href = `http://excel/stationery/${viewdate{{$i}}.value}`
+                viewlink{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                viewlink{{$i}}.setAttribute('hidden', '')
+            }
+
+        })
+
+        exportdate{{$i}}.addEventListener('change', function () {
+            if(exportdate{{$i}}.length !== 0)
+            {
+                exportlink{{$i}}.removeAttribute('hidden')
+                form{{$i}}.attributes.method.value = 'POST'
+                form{{$i}}.attributes.action.value = '{{ route("stationery.export") }}'
+            } else
+            {
+                exportlink{{$i}}.setAttribute('hidden', '')
+            }
+        })
+
+        importdate{{$i}}.addEventListener('change', function () {
+            if(importdate{{$i}}.length !== 0)
+            {
+                form{{$i}}.attributes.method.value = 'POST'
+                form{{$i}}.attributes.action.value = '{{ route("stationery.import") }}'
+                form{{$i}}.setAttribute('enctype', 'multipart/form-data')
+                importfile{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                importfile{{$i}}.setAttribute('hidden', '')
+            }
+        })
+
+        createdate{{$i}}.addEventListener('keyup', function () {
+            if(createdate{{$i}}.value.length == 10){
+                form{{$i}}.attributes.method.value = 'POST'
+                form{{$i}}.attributes.action.value = '{{ route("stationery.import") }}'
+                form{{$i}}.setAttribute('enctype', 'multipart/form-data')
+                createfile{{$i}}.removeAttribute('hidden')
+            } else
+            {
+                createfile{{$i}}.setAttribute('hidden', '')
+            }
+        })
+
+        file{{$i}}.addEventListener('change', function (){
+            importlink{{$i}}.removeAttribute('hidden')
+        })
+
+        cfile{{$i}}.addEventListener('change', function () {
+            createlink{{$i}}.removeAttribute('hidden')
+        })
+    @endfor
 
 </script>
 

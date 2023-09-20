@@ -22,7 +22,6 @@ class StationeryController extends Controller
     }
     public function export(Request $request)
     {
-        dd($request->all());
         if($request->export)
         {
             return Excel::download(new StationeryMultipleExport($request->export), 'stationery.xlsx');
@@ -31,7 +30,7 @@ class StationeryController extends Controller
             return Excel::download(new StationeryMultipleExport($request->date), 'stationery.xlsx');
         } else if($request->date_from && $request->date_to)
         {
-            return Excel::download(new StationeryMultipleExport($request->date), 'stationery.xlsx');
+            return Excel::download(new StationeryMultipleExport(0, $request->date_from, $request->date_to), 'stationery.xlsx');
         }
     }
     public function import(Request $request)
