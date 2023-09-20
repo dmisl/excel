@@ -9,7 +9,7 @@
         <div class="col-6 col-md-4 mt-3">
             <div class="card bg-primary bg-gradient text-light border" role="button" style="user-select: none;" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <div class="card-body">
-                    <h2 class="text-center ">Канцтовари</h2>
+                    <h2 class="text-center">Канцтовари</h2>
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Замовлення</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Канцтовари</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body mb1">
@@ -75,14 +75,14 @@
                                 <button hidden type="submit" class="btn btn-primary createlink1">Створити дату</button>
                             </div>
                             {{-- EXPORT BETWEEN --}}
-                            <div class="export_between1">
+                            <div class="export_between1" hidden>
                                 <label class="mt-1">Виберіть дату ВІД якої ви хочете завантажити дані</label>
 
                                 <select name="date_from" class="export_between_date_from1 form-select mt-1" aria-label="Default select example">
                                     <option selected></option>
                                 </select>
 
-                                <div class="export_between_div1 mt-3">
+                                <div class="export_between_div1 mt-3" hidden>
 
                                     <label>Виберіть дату ДО якої ви хочете завантажити дані</label>
 
@@ -90,6 +90,9 @@
                                         <option selected></option>
                                     </select>
 
+                                </div>
+                                <div class="export_between_link1 mt-3" hidden>
+                                    <button type="submit" class="btn btn-primary">Завантажити дані</button>
                                 </div>
                             </div>
                         </form>
@@ -144,32 +147,39 @@
     let create1 = document.querySelector('.create1')
     let createdate1 = document.querySelector('.createdate1')
     let createlink1 = document.querySelector('.createlink1')
-    let createfile1 = document.querySelector('.importfile1')
+    let createfile1 = document.querySelector('.createfile1')
 
     let file1 = document.querySelector('.file1')
     let cfile1 = document.querySelector('.cfile1')
 
     let export_between1 = document.querySelector('.export_between1')
+    let export_between_div1 = document.querySelector('.export_between_div1')
     let export_between_date_from1 = document.querySelector('.export_between_date_from1')
+    let export_between_date_to1 = document.querySelector('.export_between_date_to1')
+    let export_between_link1 = document.querySelector('.export_between_link1')
 
-    date.forEach(e => {
-        if(dates.includes(e.innerText))
-        {
+    dates = [
+        '2023-01-01', '2023-05-01', '2023-03-12',
+    ];
 
-        } else
-        {
-            if(e.innerText.length !== 0)
-            {
-                dates.push(e.innerText)
-            }
-        }
-    });
+    // date.forEach(e => {
+    //     if(dates.includes(e.innerText))
+    //     {
+
+    //     } else
+    //     {
+    //         if(e.innerText.length !== 0)
+    //         {
+    //             dates.push(e.innerText)
+    //         }
+    //     }
+    // });
 
     dates.forEach(e => {
         viewdate1.innerHTML += `<option value="${e}">${e}</option>`
         exportdate1.innerHTML += `<option value="${e}">${e}</option>`
         importdate1.innerHTML += `<option value="${e}">${e}</option>`
-        export_between_date_from1.innerHTML += `<option value="${e}>${e}</option>"`
+        export_between_date_from1.innerHTML += `<option value="${e}">${e}</option>`
     })
 
     select1.addEventListener('change', function () {
@@ -219,6 +229,7 @@
         } else
         {
             createlink1.setAttribute('hidden', '')
+            createfile1.setAttribute('hidden', '')
             create1.setAttribute('hidden', '')
         }
         if(select1.value == 5)
@@ -236,7 +247,33 @@
     })
 
     export_between_date_from1.addEventListener('change', function () {
-        console.log(1)
+        if(export_between_date_from1.value.length >= 1)
+        {
+            export_between_div1.removeAttribute('hidden')
+            export_between_date_to1.innerHTML = `<option></option>`
+            let selected_option = export_between_date_from1.options[export_between_date_from1.selectedIndex].value
+            dates.forEach(e => {
+                if(new Date(e).getTime() >= new Date(selected_option).getTime())
+                {
+                    export_between_date_to1.innerHTML += `<option value="${e}">${e}</option>`
+                }
+            });
+        } else
+        {
+            export_between_div1.setAttribute('hidden', '')
+        }
+    })
+
+    export_between_date_to1.addEventListener('change', function () {
+        if(export_between_date_to1.value.length >= 1)
+        {
+            form1.attributes.method.value = 'POST'
+            form1.attributes.action.value = '{{ route("stationery.export") }}'
+            export_between_link1.removeAttribute('hidden')
+        } else
+        {
+            export_between_link1.setAttribute('hidden', '')
+        }
     })
 
     viewdate1.addEventListener('change', function () {
