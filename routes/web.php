@@ -40,6 +40,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('vaccine/{date}', [VaccineController::class, 'show'])->name('vaccine.show');
     Route::post('vaccine/update', [VaccineController::class, 'update'])->name('vaccine.update');
+    Route::post('vaccine/create', [VaccineController::class, 'create'])->name('vaccine.create');
+    Route::post('vaccine/delete', [VaccineController::class, 'delete'])->name('vaccine.delete');
     Route::post('vaccine/export', [VaccineController::class, 'export'])->name('vaccine.export');
     Route::post('vaccine/import', [VaccineController::class, 'import'])->name('vaccine.import');
 

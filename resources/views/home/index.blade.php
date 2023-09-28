@@ -82,17 +82,39 @@
                                 <button hidden type="submit" class="btn btn-primary importlink{{ $i }}">Імпортувати дані</button>
                             </div>
                             {{-- CREATE --}}
-                            <div class="create{{ $i }}" hidden>
-                                <label class="mt1">Впишіть дату (повинна бути такого типу, як вписано нище)</label>
-                                <input class="form-control createdate{{ $i }}" name="create" placeholder="YYYY-MM-DD">
-                            </div>
-                            <div class="text-center mt-3 createfile{{ $i }}" hidden>
-                                <label for="formFile" class="form-label">Виберіть файл для імпортування</label>
-                                <input class="form-control cfile{{ $i }}" type="file" name="cexcel" id="formFile">
-                            </div>
-                            <div class="text-center mt-3">
-                                <button hidden type="submit" class="btn btn-primary createlink{{ $i }}">Створити дату</button>
-                            </div>
+                            @if($i == 2)
+                                <div class="create{{ $i }}" hidden>
+                                    <label class="mt-1">Впишіть дату (повинна бути такого типу, як вписано нище)</label>
+                                    <input class="form-control createdate{{ $i }}" name="create" placeholder="YYYY-MM-DD">
+                                    <div class="implement mt-1">
+                                        <input type="checkbox" class="createimplement" name="remove" id="implement">
+                                        <label for="implement" class="text-break">Скопіювати назви з останньої дати</label>
+                                    </div>
+                                    <div class="remove mt-1" hidden>
+                                        <input type="checkbox" class="createremove" name="remove" id="remove">
+                                        <label for="remove">Видалити поля з нульовими показниками</label>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3 createfile{{ $i }}" hidden>
+                                    <label for="formFile" class="form-label">Виберіть файл для імпортування</label>
+                                    <input class="form-control cfile{{ $i }}" type="file" name="cexcel" id="formFile">
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button hidden type="submit" class="btn btn-primary createlink{{ $i }}">Створити дату</button>
+                                </div>
+                            @else
+                                <div class="create{{ $i }}" hidden>
+                                    <label class="mt1">Впишіть дату (повинна бути такого типу, як вписано нище)</label>
+                                    <input class="form-control createdate{{ $i }}" name="create" placeholder="YYYY-MM-DD">
+                                </div>
+                                <div class="text-center mt-3 createfile{{ $i }}" hidden>
+                                    <label for="formFile" class="form-label">Виберіть файл для імпортування</label>
+                                    <input class="form-control cfile{{ $i }}" type="file" name="cexcel" id="formFile">
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button hidden type="submit" class="btn btn-primary createlink{{ $i }}">Створити дату</button>
+                                </div>
+                            @endif
                             {{-- EXPORT BETWEEN --}}
                             <div class="export_between{{ $i }}" hidden>
                                 <label class="mt-1">Виберіть дату ВІД якої ви хочете завантажити дані</label>
@@ -164,7 +186,7 @@
                 }
             }
     });
-    
+
     dates_st.push('2023-01-01')
 
     let dates_va = [];
@@ -185,6 +207,9 @@
 
 
     let ci = 0
+
+    let createimplement = document.querySelector('.createimplement')
+    let createremove = document.querySelector('.remove')
 
     @for($i = 1; $i < 3; $i++)
 
@@ -369,7 +394,7 @@
             }
 
         })
-        
+
         exportdate{{$i}}.addEventListener('change', function () {
             if(exportdate{{$i}}.length !== 0)
             {
@@ -423,7 +448,8 @@
                 } else if({{ $i }} == 2)
                 {
                     form{{$i}}.attributes.action.value = '{{ route("vaccine.import") }}'
-                    createlink{{$i}}.removeAttribute('hidden')
+                    createimplement.removeAttribute('hidden')
+                    createlink2.removeAttribute('hidden')
                 } else if({{ $i }} == 3)
                 {
                     form{{$i}}.attributes.action.value = '{{ route("orderb1.import") }}'
@@ -441,6 +467,21 @@
                 }
             }
         })
+
+        if({{ $i }} == 2)
+        {
+            createimplement.addEventListener('change', function () {
+                if(createimplement.checked)
+                {
+                    console.log()
+                    createremove.removeAttribute('hidden')
+                } else
+                {
+                    createremove.setAttribute('hidden', '')
+                }
+            })
+        }
+
 
         file{{$i}}.addEventListener('change', function (){
             importlink{{$i}}.removeAttribute('hidden')

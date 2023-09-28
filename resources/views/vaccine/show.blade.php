@@ -26,7 +26,7 @@
             z-index: 29;
         }
 
-        .header1 p 
+        .header1 p
         {
             padding: 0;
             width: 400px;
@@ -40,25 +40,71 @@
         }
 
     </style>
-    <div class="container">
+    <div class="container mb-0">
+
+        <h1 class="text-center">Вакцини</h1>
 
         <h1 class="text-center">{{ $date }}</h1>
 
-        <div class="text-center">
+        <div class="text-center my-2">
             <form action="{{ route('stationery.export') }}" method="POST">
                 @csrf
                 <input type="hidden" name="date" value="{{ $date }}">
                 <button class="btn btn-primary" type="submit">Скачати</button>
             </form>
         </div>
-        
-        <h1 class="text-center">Вакцини</h1>
-    
+
+
+        <div role="button" class="bg-success bg-gradient w-50 mx-auto rounded-top user-select-none text-center text-light mb-0 pb-0" data-bs-toggle="modal" data-bs-target="#addRowModal">
+            <h4 class="py-1 mb-0 pb-0">Добавити поле</h4>
+        </div>
     </div>
 
-        <div style="overflow:scroll; height: 700px;">
+<div class="modal fade" id="addRowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Добавлення поля</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="{{ route('vaccine.create') }}" method="POST">
+
+                <div class="modal-body">
+
+                    {{-- hidden --}}
+                    @csrf
+                    <input type="hidden" name="date" value="{{ $date }}">
+
+                    <div class="pb-2 mt-1 w-50 mx-auto text-center">
+                        <label for="">Назва вакцини</label>
+                        <input name="name" type="text" class="form-control text-center">
+                    </div>
+
+                    <div class="pb-2 w-50 mx-auto text-center">
+                        <label for="">Серія вакцини</label>
+                        <input name="series" type="text" class="form-control text-center">
+                    </div>
+
+                    <div class="pb-2 w-50 mx-auto text-center">
+                        <label for="">Термін придатності</label>
+                        <input name="expiry" type="text" class="form-control text-center" placeholder="ДД.ММ.РРРР">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                    <button type="submit" class="btn btn-primary row_add">Добавити</button>
+                </div>
+            </form>
+      </div>
+    </div>
+</div>
+
+        <div style="overflow:scroll; height: 65vh;">
             <table class="table text-center small stationery" style="border: 1px solid black; border-collapse: collapse;">
                 <tr class="header1">
+                    <td rowspan="2"></td>
                     <td rowspan="2" style="background-color: white;">
                         № п/п
                     </td>
@@ -121,6 +167,9 @@
                 @endphp
                 @foreach ($vaccines as $vaccine)
                     <tr>
+                        <td class="delete m-0 bg-danger bg-gradient" role="button" nid="{{ $vaccine->id }}" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Видалити рядок">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3405/3405244.png" class="p-0 m-0" width="17">
+                        </td>
                         <td class="number" vid="{{ $vaccine->id }}">
                             {{ $asd }}
                             @php($asd++)
@@ -195,22 +244,64 @@
                             {{ $vaccine->children5 }}
                         </td>
                     </tr>
-                @endforeach
-            </table>
-        </div>
-
-        <div class="container">
-            <div class="text-center">
-                <button hidden class="save btn btn-success mt-2">ЗБЕРЕГТИ</button>
+                    @endforeach
+                </table>
             </div>
-        </div>
 
-        <form class="update_form" action="{{ route('vaccine.update') }}" method="POST">
-            @csrf
-            <div class="updates" hidden></div>
-        </form>
+            {{-- HIDDEN DELETE MODALS --}}
+            <div>
+                @foreach($vaccines as $vaccine)
+                    <button hidden type="button" class="btn btn-primary deleteModal{{ $vaccine->id }}" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $vaccine->id }}">
+
+                    </button>
+
+                    <div class="modal fade" id="deleteModal{{ $vaccine->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Видалення поля</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('vaccine.delete') }}" method="POST">
+                                    <div class="modal-body">
+                                        <h3>Ви дійсно хочете видалити поле з назвою вакцини {{ $vaccine->name }}?</h3>
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $vaccine->id }}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ні</button>
+                                        <button type="submit" class="btn btn-danger">Видалити</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="container">
+                <div class="text-center">
+                    <button hidden class="save btn btn-success mt-2">ЗБЕРЕГТИ</button>
+                </div>
+            </div>
+
+            <form class="update_form" action="{{ route('vaccine.update') }}" method="POST">
+                @csrf
+                <div class="updates" hidden></div>
+            </form>
 
 <script>
+
+    let deletes = document.querySelectorAll('.delete')
+    deletes.forEach(e => {
+        e.addEventListener('click', function () {
+            document.querySelector('.deleteModal'+e.attributes.nid.value).click()
+        })
+    });
+
+    // Popovers
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 
     let updates = document.querySelector('.updates')
 
@@ -222,7 +313,7 @@
         update_form.innerHTML += `<button hidden class="update_submit" type="submit"></button>`
         document.querySelector('.update_submit').click()
     })
-    
+
     function updates_check()
     {
         if(document.querySelector('.updates').children.length >= 1)
@@ -238,7 +329,7 @@
     number.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][number]']`) !== null)
@@ -250,17 +341,17 @@
                     document.querySelector(`[name='update[${vid}][number]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -318,7 +409,7 @@
     balance1.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][balance1]']`) !== null)
@@ -330,17 +421,17 @@
                     document.querySelector(`[name='update[${vid}][balance1]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -350,7 +441,7 @@
     used1.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][used1]']`) !== null)
@@ -362,17 +453,17 @@
                     document.querySelector(`[name='update[${vid}][used1]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -382,7 +473,7 @@
     adults1.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][adults1]']`) !== null)
@@ -394,17 +485,17 @@
                     document.querySelector(`[name='update[${vid}][adults1]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -414,7 +505,7 @@
     children1.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][children1]']`) !== null)
@@ -426,17 +517,17 @@
                     document.querySelector(`[name='update[${vid}][children1]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -446,7 +537,7 @@
     balance2.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][balance2]']`) !== null)
@@ -458,17 +549,17 @@
                     document.querySelector(`[name='update[${vid}][balance2]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -478,7 +569,7 @@
     used2.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][used2]']`) !== null)
@@ -490,17 +581,17 @@
                     document.querySelector(`[name='update[${vid}][used2]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -510,7 +601,7 @@
     adults2.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][adults2]']`) !== null)
@@ -522,17 +613,17 @@
                     document.querySelector(`[name='update[${vid}][adults2]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -542,7 +633,7 @@
     children2.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][children2]']`) !== null)
@@ -554,17 +645,17 @@
                     document.querySelector(`[name='update[${vid}][children2]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -574,7 +665,7 @@
     balance3.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][balance3]']`) !== null)
@@ -586,17 +677,17 @@
                     document.querySelector(`[name='update[${vid}][balance3]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -606,7 +697,7 @@
     used3.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][used3]']`) !== null)
@@ -618,17 +709,17 @@
                     document.querySelector(`[name='update[${vid}][used3]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -638,7 +729,7 @@
     adults3.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][adults3]']`) !== null)
@@ -650,17 +741,17 @@
                     document.querySelector(`[name='update[${vid}][adults3]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -670,7 +761,7 @@
     children3.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][children3]']`) !== null)
@@ -682,17 +773,17 @@
                     document.querySelector(`[name='update[${vid}][children3]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -702,7 +793,7 @@
     balance4.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][balance4]']`) !== null)
@@ -714,17 +805,17 @@
                     document.querySelector(`[name='update[${vid}][balance4]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -734,7 +825,7 @@
     used4.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][used4]']`) !== null)
@@ -746,17 +837,17 @@
                     document.querySelector(`[name='update[${vid}][used4]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -766,7 +857,7 @@
     adults4.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][adults4]']`) !== null)
@@ -778,17 +869,17 @@
                     document.querySelector(`[name='update[${vid}][adults4]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -798,7 +889,7 @@
     children4.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][children4]']`) !== null)
@@ -810,17 +901,17 @@
                     document.querySelector(`[name='update[${vid}][children4]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -830,7 +921,7 @@
     balance5.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][balance5]']`) !== null)
@@ -842,17 +933,17 @@
                     document.querySelector(`[name='update[${vid}][balance5]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -862,7 +953,7 @@
     used5.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][used5]']`) !== null)
@@ -874,17 +965,17 @@
                     document.querySelector(`[name='update[${vid}][used5]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -894,7 +985,7 @@
     adults5.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][adults5]']`) !== null)
@@ -906,17 +997,17 @@
                     document.querySelector(`[name='update[${vid}][adults5]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
@@ -926,7 +1017,7 @@
     children5.forEach(el => {
         el.setAttribute('contenteditable', 'true')
         el.addEventListener('keyup', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
                 let vid = el.attributes.vid.value
                 if(document.querySelector(`[name='update[${vid}][children5]']`) !== null)
@@ -938,17 +1029,17 @@
                     document.querySelector(`[name='update[${vid}][children5]']`).setAttribute('value', el.innerText)
                 }
                 updates_check()
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
         })
         el.addEventListener('keydown', function (e) {
-            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period') 
+            if (e.code.includes('Digit') || e.code === 'Backspace' || e.code === 'Period')
             {
-            } 
-            else 
+            }
+            else
             {
                 e.preventDefault()
             }
