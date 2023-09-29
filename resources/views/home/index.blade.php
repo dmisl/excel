@@ -87,7 +87,7 @@
                                     <label class="mt-1">Впишіть дату (повинна бути такого типу, як вписано нище)</label>
                                     <input class="form-control createdate{{ $i }}" name="create" placeholder="YYYY-MM-DD">
                                     <div class="implement mt-1">
-                                        <input type="checkbox" class="createimplement" name="remove" id="implement">
+                                        <input type="checkbox" class="createimplement" name="implement" id="implement">
                                         <label for="implement" class="text-break">Скопіювати назви з останньої дати</label>
                                     </div>
                                     <div class="remove mt-1" hidden>

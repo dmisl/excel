@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Vaccine;
+use App\Models\VaccineHeader;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +21,33 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => 'adminn',
         ]);
+
+        VaccineHeader::insert([
+            [
+                'balance1' => 'залишок на початок місяця', 
+                'used1' => 'використано',
+                'adults1' => 'із них дорослі',
+                'children1' => 'діти до року',
+                'balance2' => 'залишок на початок місяця',
+                'used2' => 'використано',
+                'adults2' => 'із них дорослі',
+                'children2' => 'діти до року',
+                'balance3' => 'залишок на початок місяця',
+                'used3' => 'використано',
+                'adults3' => 'із них дорослі',
+                'children3' => 'діти до року',
+                'balance4' => 'залишок на початок місяця',
+                'used4' => 'використано',
+                'adults4' => 'із них дорослі',
+                'children4' => 'діти до року',
+                'balance5' => 'залишок на початок місяця',
+                'used5' => 'використано',
+                'adults5' => 'із них дорослі',
+                'children5' => 'діти до року',
+                'date' => '00-00-0000',
+            ]
+        ]);
+
         Vaccine::insert([
             [
                 'name' => 'bostrix',

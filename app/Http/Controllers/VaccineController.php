@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vaccine;
+use App\Models\VaccineHeader;
 use Illuminate\Http\Request;
 
 class VaccineController extends Controller
@@ -10,7 +11,8 @@ class VaccineController extends Controller
     public function show($date)
     {
         $vaccines = Vaccine::query()->where(['date' => $date])->orderBy('name', 'asc')->get();
-        return view('vaccine.show', compact('vaccines', 'date'));
+        $vaccine_headers = VaccineHeader::query()->where(['date' => $date])->first();
+        return view('vaccine.show', compact('vaccines', 'vaccine_headers', 'date'));
     }
 
     public function create(Request $request)
@@ -61,10 +63,33 @@ class VaccineController extends Controller
     }
     public function import(Request $request)
     {
-        dd($request->all());
         if($request->create)
         {
             
+            if($request->implement)
+            {
+                
+                if($request->remove)
+                {
+
+                    $date = Vaccine::orderBy('date', 'DESC')->first();
+
+                    dd($date);
+
+                } else
+                {
+
+                    $date = Vaccine::orderBy('date', 'DESC')->first();
+
+                    dd($date);
+
+                }
+
+            } else
+            {
+                dd(2);
+            }
+
         } else
         {
             return back();
